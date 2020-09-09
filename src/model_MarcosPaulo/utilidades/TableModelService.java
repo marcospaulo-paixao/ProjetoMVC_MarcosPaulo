@@ -1,0 +1,82 @@
+package model_MarcosPaulo.utilidades;
+
+import model_MarcosPaulo.classes.Cliente;
+import model_MarcosPaulo.interfaces.CRUDCliente;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ * PROJETO MVC
+ *
+ * @author Marcos Paulo Paixão { 03/08/20 }
+ */
+public class TableModelService {
+
+    /*
+      Atributos
+     */
+    private static TableModelService instance = null;
+    private CRUDCliente clienteControll = null;
+    private DefaultTableModel model = null;
+
+    /*
+      Métodos
+     */
+    /**
+     * @default
+     */
+    private TableModelService() {
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static TableModelService getInstance() {
+        if (instance == null) {
+            instance = new TableModelService();
+        }
+        return instance;
+    }
+
+    /**
+     *
+     * @param cliControll
+     */
+    public void setClienteControll(CRUDCliente cliControll) {
+        this.clienteControll = cliControll;
+    }
+
+    /**
+     *
+     * @param model
+     */
+    public void setModel(DefaultTableModel model) {
+        this.model = model;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public DefaultTableModel getModel() {
+        return this.model;
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
+    public void update() throws Exception {
+        try {
+
+            model.setNumRows(0);
+
+            for (Cliente cliente : clienteControll.findAll()) {
+                String[] data = {cliente.getNome(), cliente.getEmail(), (cliente.getTipoDeConta().equals(TipoDeConta.COMUM)) ? "Conta Comum" : "Conta Especial"};
+                model.addRow(data);
+            }
+        } catch (Exception erro) {
+            throw erro;
+        }
+    }
+}
